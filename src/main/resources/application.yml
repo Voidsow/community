@@ -1,7 +1,6 @@
 server:
   servlet:
-    context-path: /hello
-
+    context-path: /
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,6 +11,19 @@ spring:
     init:
       mode: always
       data-locations: classpath:sql/*.sql
+  mail:
+    host: smtp.163.com
+    port: 465
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          connectiontimeout: 10000
+          timeout: 10000
+          writetimeout: 10000
+          ssl:
+            enable: true
 
 mybatis:
   configuration:
@@ -25,3 +37,10 @@ page:
 logging:
   level:
     com.voidsow.community.CommunityApplicationTests: warn
+
+test:
+  mail:
+    to:
+
+brand: Café Stella
+domain: localhost:8080
