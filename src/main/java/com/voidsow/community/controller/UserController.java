@@ -1,17 +1,23 @@
 package com.voidsow.community.controller;
 
+import com.google.code.kaptcha.Producer;
 import com.voidsow.community.constant.Activation;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 import static com.voidsow.community.constant.Activation.ACTIVATED;
@@ -20,10 +26,12 @@ import static com.voidsow.community.constant.Activation.SUCCEESS;
 @Controller
 public class UserController {
     UserService userService;
+    Producer captchaProducer;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Producer captchaProducer) {
         this.userService = userService;
+        this.captchaProducer = captchaProducer;
     }
 
     @GetMapping("/register")
@@ -34,6 +42,16 @@ public class UserController {
     @GetMapping("/login")
     public String getLogin() {
         return "login";
+    }
+
+    @GetMapping(value = "/captcha", produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
+    public byte[] getCaptcha(HttpSession session) throws IOException {
+        String text = captchaProducer.createText();
+        session.setAttribute("captcha", text);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(captchaProducer.createImage(text), "png", outputStream);
+        return outputStream.toByteArray();
     }
 
     @PostMapping("/register")

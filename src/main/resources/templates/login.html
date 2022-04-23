@@ -8,6 +8,11 @@
           crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/global.css}"/>
     <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <style>
+        .flush-captcha:hover {
+            cursor: pointer;
+        }
+    </style>
     <title>登录</title>
 </head>
 <body>
@@ -49,8 +54,8 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <img th:src="@{/img/captcha.png}" style="width:100px;height:40px;" class="mr-2"/>
-                        <a href="javascript:;" class="font-size-12 align-bottom">刷新验证码</a>
+                        <img id="captcha" th:src="@{/captcha}" style="width:100px;height:40px;" class="mr-2"/>
+                        <a id="flushCaptcha" class="font-size-12 align-bottom flush-captcha">刷新验证码</a>
                     </div>
                 </div>
                 <div class="form-group row mt-4">
@@ -79,5 +84,10 @@
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <script th:src="@{/js/global.js}"></script>
+<script>
+    let flushCaptcha = document.querySelector("#flushCaptcha");
+    let captcha = document.querySelector("#captcha");
+    flushCaptcha.onclick = () => captcha.src = CONTEXT_PATH + "/captcha"
+</script>
 </body>
 </html>
