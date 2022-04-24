@@ -5,11 +5,17 @@ import com.voidsow.community.entity.User;
 import com.voidsow.community.entity.UserExample;
 import com.voidsow.community.mapper.UserMapper;
 import com.voidsow.community.utils.MailClient;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.mail.MessagingException;
+import java.security.Key;
 import java.util.*;
 
 import static com.voidsow.community.constant.Activation.*;
@@ -19,6 +25,8 @@ import static com.voidsow.community.service.Constant.*;
 public class UserService {
     UserMapper userMapper;
     MailClient mailClient;
+
+    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     @Autowired
     public UserService(UserMapper userMapper, MailClient mailClient) {
@@ -81,8 +89,43 @@ public class UserService {
             return ACTIVATED;
     }
 
+    public Map<String, Object> login(String username, String password, int duration) {
+        Map<String, Object> map = new HashMap<>();
+        if (username == null || username.isEmpty()) {
+            map.put("usernameMsg", "用户名不能为空");
+        } else if (password == null || password.isEmpty()) {
+            map.put("passwordMsg", "密码不能为空");
+        }
+        if (!map.isEmpty())
+            return map;
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(username);
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.isEmpty()) {
+            map.put("usernameMsg", "该账号不存在");
+            return map;
+        }
+        User user = users.get(0);
+        if (!DigestUtils.md5DigestAsHex((password + user.getSalt()).getBytes()).
+                equals(user.getPassword())) {
+            map.put("passwordMsg", "密码错误");
+            return map;
+        }
+        map.put("token", generateToken(user.getId().toString(), duration));
+        return map;
+    }
+
     String generateUUID() {
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    String generateToken(String uid, int duration) {
+        Calendar calendar = Calendar.getInstance();
+        Date curTime = calendar.getTime();
+        calendar.add(Calendar.SECOND, duration);
+        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).setId(generateUUID()).setAudience(uid).
+                setIssuedAt(curTime).setExpiration(calendar.getTime()).setSubject("user").
+                signWith(key).compact();
     }
 }
 

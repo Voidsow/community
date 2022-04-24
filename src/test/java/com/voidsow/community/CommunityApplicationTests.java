@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class CommunityApplicationTests {
-    Logger logger= LoggerFactory.getLogger(CommunityApplicationTests.class);
+    Logger logger = LoggerFactory.getLogger(CommunityApplicationTests.class);
 
     @Test
     void contextLoads() {
