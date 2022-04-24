@@ -6,7 +6,6 @@ import com.voidsow.community.entity.User;
 import com.voidsow.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -115,6 +114,7 @@ public class UserController {
             token.setPath(contextPath);
             token.setMaxAge(duration);
             response.addCookie(token);
+            session.removeAttribute("captcha");
             return "redirect:/";
         } else {
             model.addAllAttributes(map);

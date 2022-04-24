@@ -1,5 +1,6 @@
 package com.voidsow.community.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voidsow.community.constant.Activation;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.entity.UserExample;
@@ -25,13 +26,15 @@ import static com.voidsow.community.service.Constant.*;
 public class UserService {
     UserMapper userMapper;
     MailClient mailClient;
+    Key key;
 
-    Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public UserService(UserMapper userMapper, MailClient mailClient) {
+    public UserService(UserMapper userMapper, MailClient mailClient, Key key) {
         this.userMapper = userMapper;
         this.mailClient = mailClient;
+        this.key = key;
     }
 
     public User findById(Integer id) {
@@ -111,7 +114,7 @@ public class UserService {
             map.put("passwordMsg", "密码错误");
             return map;
         }
-        map.put("token", generateToken(user.getId().toString(), duration));
+        map.put("token", generateToken(user, duration));
         return map;
     }
 
@@ -119,13 +122,15 @@ public class UserService {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    String generateToken(String uid, int duration) {
+    public String generateToken(User user, int duration) {
         Calendar calendar = Calendar.getInstance();
         Date curTime = calendar.getTime();
         calendar.add(Calendar.SECOND, duration);
-        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).setId(generateUUID()).setAudience(uid).
-                setIssuedAt(curTime).setExpiration(calendar.getTime()).setSubject("user").
-                signWith(key).compact();
+
+        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).
+                setIssuedAt(curTime).setExpiration(calendar.getTime()).
+                claim("user", objectMapper.convertValue(user, Map.class)).
+                setId(generateUUID()).signWith(key).compact();
     }
 }
 
