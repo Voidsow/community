@@ -30,12 +30,6 @@ mybatis:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
 
-# 分页配置
-page:
-  # 页大小
-  size: 10
-  # 页数量
-  num: 5
 
 logging:
   level:
@@ -45,15 +39,21 @@ test:
   mail:
     to:
 
-# 社区名
-brand: Café Stella
-# 域名
-domain: localhost:8080
-
-token:
-  # token的有效时间，单位为秒
-  duration:
-    # 会话级
-    session: 600
-    # 长期有效时间
-    long-term: 24192000 #30*24*3600
+community:
+  # 社区名
+  brand: Café Stella
+  # 域名
+  domain: localhost:8080
+  # 分页配置
+  page:
+    # 页大小
+    size: 10
+    # 页数量
+    num: 5
+  token:
+    # token的有效时间，单位为秒
+    duration:
+      # 会话级
+      session: 600
+      # 长期有效时间
+      long-term: 24192000 #30*24*3600

@@ -21,10 +21,10 @@ public class PostService {
     PostMapper postMapper;
     UserMapper userMapper;
 
-    @Value("${page.size}")
+    @Value("${community.page.size}")
     int pageSize;
 
-    @Value("${page.num}")
+    @Value("${community.page.num}")
     int pageNum;
 
     @Autowired

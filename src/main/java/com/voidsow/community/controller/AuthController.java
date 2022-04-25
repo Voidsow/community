@@ -24,21 +24,21 @@ import static com.voidsow.community.constant.Activation.ACTIVATED;
 import static com.voidsow.community.constant.Activation.SUCCEESS;
 
 @Controller
-public class UserController {
+public class AuthController {
     UserService userService;
     Producer captchaProducer;
 
     @Value("${server.servlet.context-path}")
     String contextPath;
 
-    @Value("${token.duration.session}")
+    @Value("${community.token.duration.session}")
     int SESSION;
 
-    @Value("${token.duration.long-term}")
+    @Value("${community.token.duration.long-term}")
     int LONG_TERM;
 
     @Autowired
-    public UserController(UserService userService, Producer captchaProducer) {
+    public AuthController(UserService userService, Producer captchaProducer) {
         this.userService = userService;
         this.captchaProducer = captchaProducer;
     }

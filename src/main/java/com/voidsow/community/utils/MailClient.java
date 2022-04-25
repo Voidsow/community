@@ -19,10 +19,10 @@ public class MailClient {
 
     private JavaMailSender mailSender;
 
-    @Value("${brand}")
+    @Value("${community.brand}")
     String brand;
 
-    @Value("${domain}")
+    @Value("${community.domain}")
     String domain;
 
     @Value("${server.servlet.context-path}")
