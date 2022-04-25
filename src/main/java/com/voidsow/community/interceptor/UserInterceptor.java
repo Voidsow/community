@@ -50,7 +50,8 @@ public class UserInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        modelAndView.addObject("user", hostHolder.user.get());
+        if (modelAndView != null && hostHolder.user.get() != null)
+            modelAndView.addObject("user", hostHolder.user.get());
     }
 
     @Override
