@@ -10,6 +10,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class PostService {
         posts.forEach(x -> users.add(userMapper.selectByPrimaryKey(x.getUid())));
         map.put("posts", posts);
         map.put("users", users);
-        map.put("page", new Page(userMapper.countByExample(new UserExample()),
+        map.put("page", new Page(postMapper.countByExample(postExample),
                 pageNo, pageSize, pageNum));
         return map;
     }
@@ -54,5 +55,12 @@ public class PostService {
         if (uid != null)
             postExample.createCriteria().andUidEqualTo(uid);
         return postMapper.countByExample(postExample);
+    }
+
+    public void add(Post post) {
+        //转义标签，防止脚本攻击
+        post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
+        post.setContent(HtmlUtils.htmlEscape(post.getContent()));
+        postMapper.insertSelective(post);
     }
 }
