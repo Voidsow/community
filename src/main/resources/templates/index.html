@@ -27,7 +27,7 @@
                     </li>
                 </ul>
                 <button type="button" class="btn btn-primary btn-sm position-absolute rt-0" data-toggle="modal"
-                        data-target="#publishModal">我要发布
+                        th:if="${user!=null}" data-target="#publishModal">我要发布
                 </button>
             </div>
             <!-- 弹出框 -->
@@ -88,13 +88,13 @@
                             <span class="badge badge-secondary bg-primary" th:if="${post.type==1}">置顶</span>
                             <span class="badge badge-secondary bg-danger" th:if="${post.status==1}">精华</span>
                         </h6>
-                        <div class="text-muted font-size-12">
-                            <u class="mr-3" th:utext="${users.get(iter.index).username}"></u> 发布于 <b
+                        <div class="text-muted font-size-12" th:object="${users.get(iter.index)}">
+                            <u class="mr-3" th:utext="*{username}"></u> 发布于 <b
                                 th:text="${#dates.format(post.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
                             <ul class="d-inline float-right">
-                                <li class="d-inline ml-2">赞 11</li>
+                                <li class="d-inline ml-2">赞 <span>点赞数</span></li>
                                 <li class="d-inline ml-2">|</li>
-                                <li class="d-inline ml-2">回帖 7</li>
+                                <li class="d-inline ml-2">回帖 <span th:text="${post.commentNum}"></span></li>
                             </ul>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
-<script src="js/global.js"></script>
-<script src="js/index.js"></script>
+<script th:src="@{/js/global.js}"></script>
+<script th:src="@{/js/index.js}"></script>
 </body>
 </html>
