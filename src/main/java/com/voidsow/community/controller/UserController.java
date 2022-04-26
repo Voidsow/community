@@ -1,5 +1,6 @@
 package com.voidsow.community.controller;
 
+import com.voidsow.community.annotation.LoginRequire;
 import com.voidsow.community.service.UserService;
 import com.voidsow.community.utils.Authorizer;
 import com.voidsow.community.utils.HostHolder;
@@ -40,11 +41,13 @@ public class UserController {
         this.authorizer = authorizer;
     }
 
+    @LoginRequire
     @GetMapping("/setting")
     public String getPage() {
         return "setting";
     }
 
+    @LoginRequire
     @PostMapping("/upload")
     public String uploadHeader(MultipartFile headerImage,
                                Model model) throws IOException {
