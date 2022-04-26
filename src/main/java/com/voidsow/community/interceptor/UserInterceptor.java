@@ -1,12 +1,13 @@
 package com.voidsow.community.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.voidsow.community.entity.User;
+import com.voidsow.community.service.UserService;
+import com.voidsow.community.utils.Authorizer;
 import com.voidsow.community.utils.HostHolder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.SignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,34 +17,37 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
-import java.util.Map;
 
 @Component
 public class UserInterceptor implements HandlerInterceptor {
+    static Logger logger = LoggerFactory.getLogger(UserInterceptor.class);
     Key key;
     HostHolder hostHolder;
-    ObjectMapper objectMapper = new ObjectMapper();
+    Authorizer authorizer;
+    UserService userService;
 
     @Autowired
-    public UserInterceptor(Key key, HostHolder hostHolder) {
+    public UserInterceptor(Key key, HostHolder hostHolder, Authorizer authorizer, UserService userService) {
         this.key = key;
         this.hostHolder = hostHolder;
+        this.authorizer = authorizer;
+        this.userService = userService;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
-        if (cookies != null)
+         if (cookies != null)
             for (var cookie : cookies)
                 if (cookie.getName().equals("token")) {
+                    logger.debug(String.format("token%s", cookie.getValue()));
                     try {
                         Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(cookie.getValue());
-                        hostHolder.user.set(objectMapper.convertValue(claimsJws.getBody().get("user", Map.class), User.class));
-                    } catch (SignatureException e) {
+                        hostHolder.user.set(userService.findById(Integer.parseInt(claimsJws.getBody().getAudience())));
+                    } catch (Exception e) {
                         cookie.setMaxAge(0);
-                        break;
+                        response.addCookie(cookie);
                     }
-                    break;
                 }
         return true;
     }

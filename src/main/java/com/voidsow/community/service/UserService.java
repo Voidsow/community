@@ -1,34 +1,31 @@
 package com.voidsow.community.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voidsow.community.constant.Activation;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.entity.UserExample;
 import com.voidsow.community.mapper.UserMapper;
+import com.voidsow.community.utils.Authorizer;
 import com.voidsow.community.utils.MailClient;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.mail.MessagingException;
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.voidsow.community.constant.Activation.*;
 import static com.voidsow.community.service.Constant.*;
+import static com.voidsow.community.utils.Authorizer.generateUUID;
 
 @Service
 public class UserService {
     UserMapper userMapper;
     MailClient mailClient;
     Key key;
-
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public UserService(UserMapper userMapper, MailClient mailClient, Key key) {
@@ -92,7 +89,7 @@ public class UserService {
             return ACTIVATED;
     }
 
-    public Map<String, Object> login(String username, String password, int duration) {
+    public Map<String, Object> login(String username, String password) {
         Map<String, Object> map = new HashMap<>();
         if (username == null || username.isEmpty()) {
             map.put("usernameMsg", "用户名不能为空");
@@ -114,23 +111,15 @@ public class UserService {
             map.put("passwordMsg", "密码错误");
             return map;
         }
-        map.put("token", generateToken(user, duration));
+        map.put("user", user);
         return map;
     }
 
-    String generateUUID() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
-    }
-
-    public String generateToken(User user, int duration) {
-        Calendar calendar = Calendar.getInstance();
-        Date curTime = calendar.getTime();
-        calendar.add(Calendar.SECOND, duration);
-
-        return Jwts.builder().setHeaderParam(Header.TYPE, Header.JWT_TYPE).
-                setIssuedAt(curTime).setExpiration(calendar.getTime()).
-                claim("user", objectMapper.convertValue(user, Map.class)).
-                setId(generateUUID()).signWith(key).compact();
+    public void updateHeader(int userId, String headerUrl) {
+        User user = new User();
+        user.setId(userId);
+        user.setHeaderUrl(headerUrl);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
 

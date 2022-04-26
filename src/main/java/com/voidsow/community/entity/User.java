@@ -121,7 +121,7 @@ public class User {
      * @mbg.generated Thu Apr 21 20:06:45 CST 2022
      */
     public User() {
-        super();
+         super();
     }
 
     /**

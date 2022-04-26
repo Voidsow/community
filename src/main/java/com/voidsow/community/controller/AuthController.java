@@ -4,6 +4,7 @@ import com.google.code.kaptcha.Producer;
 import com.voidsow.community.constant.Activation;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.service.UserService;
+import com.voidsow.community.utils.Authorizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import static com.voidsow.community.constant.Activation.SUCCEESS;
 public class AuthController {
     UserService userService;
     Producer captchaProducer;
+    Authorizer authorizer;
 
     @Value("${server.servlet.context-path}")
     String contextPath;
@@ -38,9 +40,10 @@ public class AuthController {
     int LONG_TERM;
 
     @Autowired
-    public AuthController(UserService userService, Producer captchaProducer) {
+    public AuthController(UserService userService, Producer captchaProducer, Authorizer authorizer) {
         this.userService = userService;
         this.captchaProducer = captchaProducer;
+        this.authorizer = authorizer;
     }
 
     @GetMapping("/register")
@@ -108,9 +111,11 @@ public class AuthController {
             return "login";
         }
         int duration = longTerm ? LONG_TERM : SESSION;
-        Map<String, Object> map = userService.login(username, password, duration);
-        if (map.containsKey("token")) {
-            Cookie token = new Cookie("token", (String) map.get("token"));
+        Map<String, Object> map = userService.login(username, password);
+        if (map.containsKey("user")) {
+            User user = (User) map.get("user");
+            authorizer.generateToken(user, duration);
+            Cookie token = new Cookie("token", authorizer.generateToken(user, duration));
             token.setPath(contextPath);
             token.setMaxAge(duration);
             response.addCookie(token);

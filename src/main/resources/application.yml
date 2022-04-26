@@ -43,7 +43,9 @@ community:
   # 社区名
   brand: Café Stella
   # 域名
-  domain: localhost:8080
+  domain: http://localhost:8080
+  path:
+    upload: C:/Users/voidsow/Desktop
   # 分页配置
   page:
     # 页大小
@@ -54,6 +56,6 @@ community:
     # token的有效时间，单位为秒
     duration:
       # 会话级
-      session: 600
+      session: 180
       # 长期有效时间
-      long-term: 24192000 #30*24*3600
+      long-term: 2592000 #30*24*3600
