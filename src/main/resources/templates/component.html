@@ -57,6 +57,26 @@
     </div>
 </header>
 
+<nav class="mt-5" th:fragment="pagination" th:unless="${page.pageNos.isEmpty()}">
+    <ul class="pagination justify-content-center" th:object="${page}">
+        <li th:class="|page-item *{current==1?'disabled':''}|">
+            <a class="page-link" href="?page=1">首页</a>
+        </li>
+        <li th:class="|page-item *{current==1?'disabled':''}|">
+            <a class="page-link" th:href="|?page=*{current-1}|">上一页</a>
+        </li>
+        <li th:class="|page-item ${pageNo==page.current?'active':''}|" th:each="pageNo:*{pageNos}">
+            <a class="page-link" th:href="|?page=${pageNo}" th:text="${pageNo}">页码</a>
+        </li>
+        <li th:class="|page-item *{current==last?'disabled':''}|">
+            <a class="page-link" th:href="|?page=*{current+1}|">下一页</a>
+        </li>
+        <li th:class="|page-item *{current==last?'disabled':''}|">
+            <a class="page-link" th:href="|?page=*{last}|">末页</a>
+        </li>
+    </ul>
+</nav>
+
 <footer class="bg-dark" th:fragment="footer">
     <div class="container">
         <div class="row">

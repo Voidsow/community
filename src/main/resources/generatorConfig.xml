@@ -34,11 +34,14 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="user" domainObjectName="User">
-            <!--false则将列名转换为驼峰形式-->
-            <property name="useActualColumnNames" value="false"/>
-        </table>
-        <table tableName="post" domainObjectName="Post">
+<!--        <table tableName="user" domainObjectName="User">-->
+<!--            &lt;!&ndash;false则将列名转换为驼峰形式&ndash;&gt;-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--        </table>-->
+<!--        <table tableName="post" domainObjectName="Post">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--        </table>-->
+        <table tableName="comment" domainObjectName="Comment">
             <property name="useActualColumnNames" value="false"/>
         </table>
     </context>

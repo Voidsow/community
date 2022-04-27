@@ -32,3 +32,18 @@ create table post
     score        double   default null
 );
 create index post_uid_index on post (uid);
+
+drop table if exists comment;
+create table comment
+(
+    id           int auto_increment primary key,
+    uid          int comment '评论作者',
+    type         int comment '评论类型',
+    reply_to     int comment '回复对象的id',
+    reply_to_uid int default null comment '回复对象的作者',
+    content      text,
+    status       int default 0,
+    gmt_create   datetime,
+    gmt_modified datetime
+);
+create index comment_belong_to_index on comment (reply_to);

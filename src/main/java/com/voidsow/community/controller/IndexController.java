@@ -24,7 +24,7 @@ public class IndexController {
     @GetMapping
     public String hello(@RequestParam(value = "page", defaultValue = "1") Integer page,
                         Model model) {
-        model.addAllAttributes(postService.get(null, page));
+        model.addAllAttributes(postService.getPosts(null, page));
         return "index";
     }
 }

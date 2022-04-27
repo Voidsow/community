@@ -1,3 +1,4 @@
+INSERT INTO `post` (`uid`, `title`, `content`, `type`, `status`, `gmt_create`) VALUES (3, '民族脊梁：鲁迅', '民族脊梁：鲁迅', 0, 0, '2021-12-17 10:50:08');
 INSERT INTO `post` (`uid`, `title`, `content`, `type`, `status`, `gmt_create`) VALUES (1, 'test0', 'this is a test post.', 0, 0, '2019-09-08 09:25:24');
 INSERT INTO `post` (`uid`, `title`, `content`, `type`, `status`, `gmt_create`) VALUES (2, 'test1', 'this is a test post.', 0, 0, '2019-09-08 09:25:24');
 INSERT INTO `post` (`uid`, `title`, `content`, `type`, `status`, `gmt_create`) VALUES (3, 'test2', 'this is a test post.', 0, 0, '2019-09-08 09:25:24');

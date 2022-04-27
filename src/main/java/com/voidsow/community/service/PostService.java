@@ -3,7 +3,6 @@ package com.voidsow.community.service;
 import com.voidsow.community.dto.Page;
 import com.voidsow.community.entity.Post;
 import com.voidsow.community.entity.PostExample;
-import com.voidsow.community.entity.UserExample;
 import com.voidsow.community.mapper.PostMapper;
 import com.voidsow.community.mapper.UserMapper;
 import org.apache.ibatis.session.RowBounds;
@@ -34,7 +33,7 @@ public class PostService {
         this.userMapper = userMapper;
     }
 
-    public Map<String, Object> get(Integer uid, int pageNo) {
+    public Map<String, Object> getPosts(Integer uid, int pageNo) {
         PostExample postExample = new PostExample();
         if (uid != null)
             postExample.createCriteria().andUidEqualTo(uid);
@@ -55,6 +54,10 @@ public class PostService {
         if (uid != null)
             postExample.createCriteria().andUidEqualTo(uid);
         return postMapper.countByExample(postExample);
+    }
+
+    public Post get(Integer id) {
+        return postMapper.selectByPrimaryKey(id);
     }
 
     public void add(Post post) {

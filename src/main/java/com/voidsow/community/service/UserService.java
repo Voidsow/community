@@ -4,7 +4,6 @@ import com.voidsow.community.constant.Activation;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.entity.UserExample;
 import com.voidsow.community.mapper.UserMapper;
-import com.voidsow.community.utils.Authorizer;
 import com.voidsow.community.utils.MailClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.voidsow.community.constant.Activation.*;
-import static com.voidsow.community.service.Constant.*;
+import static com.voidsow.community.constant.Constant.*;
 import static com.voidsow.community.utils.Authorizer.generateUUID;
 
 @Service
@@ -121,13 +120,4 @@ public class UserService {
         user.setHeaderUrl(headerUrl);
         userMapper.updateByPrimaryKeySelective(user);
     }
-}
-
-final class Constant {
-    //用户激活状态
-    static int UNACTIVATED = 0;
-    static int NORMAL = 1;
-
-    //用户类型
-    static int COMMON = 0;
 }
