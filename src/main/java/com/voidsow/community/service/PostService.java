@@ -59,11 +59,4 @@ public class PostService {
     public Post get(Integer id) {
         return postMapper.selectByPrimaryKey(id);
     }
-
-    public void add(Post post) {
-        //转义标签，防止脚本攻击
-        post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
-        post.setContent(HtmlUtils.htmlEscape(post.getContent()));
-        postMapper.insertSelective(post);
-    }
 }
