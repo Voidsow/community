@@ -26,13 +26,13 @@ public class UserController {
     Authorizer authorizer;
 
     @Value("${community.path.upload}")
-    String UPLOAD_PATH;
+    private String UPLOAD_PATH;
 
     @Value("${community.domain}")
-    String DOMAIN;
+    private String DOMAIN;
 
     @Value("${server.servlet.context-path}")
-    String CONTEXT_PATH;
+    private String CONTEXT_PATH;
 
     @Autowired
     public UserController(UserService userService, HostHolder hostHolder, Authorizer authorizer) {

@@ -38,8 +38,8 @@ create table comment
 (
     id           int auto_increment primary key,
     uid          int comment '评论作者',
-    type         int comment '评论类型',
-    reply_to     int comment '回复对象的id',
+    type         int comment '评论类型:0表示为一级评论，1表示为二级评论',
+    reply_to     int comment '回复对象的id:一级评论此字段为post的id,二级评论为被回复一级评论的id',
     reply_to_uid int default null comment '回复对象的作者',
     content      text,
     status       int default 0,

@@ -27,13 +27,13 @@ public class PostController {
     PostService postService;
     UserService userService;
     CommentService commentService;
-    HostHolder hostHolder;
+    private HostHolder hostHolder;
 
     @Value("${community.page.size}")
-    int pageSize;
+    private int pageSize;
 
     @Value("${community.page.num}")
-    int pageNum;
+    private int pageNum;
 
     @Autowired
     public PostController(PostService postService, UserService userService,
@@ -73,7 +73,7 @@ public class PostController {
             commentVOList.add(commentVo);
         }
         model.addAttribute("comments", commentVOList);
-        model.addAttribute("user", userService.findById(post.getUid()));
+        model.addAttribute("author", userService.findById(post.getUid()));
         model.addAttribute("page",
                 new Page(commentService.getCount(POST_LEVEL_ONE, id), page, pageSize, pageNum));
         return "discuss-detail";

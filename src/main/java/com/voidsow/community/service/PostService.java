@@ -59,4 +59,8 @@ public class PostService {
     public Post get(Integer id) {
         return postMapper.selectByPrimaryKey(id);
     }
+
+    public void add(Post post) {
+        postMapper.insertSelective(post);
+    }
 }

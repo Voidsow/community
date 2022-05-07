@@ -28,16 +28,16 @@ import static com.voidsow.community.constant.Activation.SUCCEESS;
 public class AuthController {
     UserService userService;
     Producer captchaProducer;
-    Authorizer authorizer;
+    private Authorizer authorizer;
 
     @Value("${server.servlet.context-path}")
-    String contextPath;
+    private String contextPath;
 
     @Value("${community.token.duration.session}")
-    int SESSION;
+    private int SESSION;
 
     @Value("${community.token.duration.long-term}")
-    int LONG_TERM;
+    private int LONG_TERM;
 
     @Autowired
     public AuthController(UserService userService, Producer captchaProducer, Authorizer authorizer) {

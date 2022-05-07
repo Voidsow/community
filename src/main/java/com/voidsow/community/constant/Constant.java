@@ -1,6 +1,6 @@
 package com.voidsow.community.constant;
 
-public class Constant {
+public final class Constant {
     //用户激活状态
     static public int UNACTIVATED = 0;
     static public int NORMAL = 1;

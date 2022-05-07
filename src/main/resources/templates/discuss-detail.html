@@ -31,11 +31,11 @@
             <!-- 作者 -->
             <div class="media pb-3 border-bottom">
                 <a href="blank">
-                    <img th:src="${user.headerUrl}"
-                         class="align-self-start mr-4 rounded-circle user-header" alt="用户头像">
+                    <img th:src="${author.headerUrl}"
+                         class="align-self-start mr-4 rounded-circle user-header" alt="作者头像">
                 </a>
                 <div class="media-body">
-                    <div class="mt-0 text-warning" th:utext="${user.username}">作者</div>
+                    <div class="mt-0 text-warning" th:utext="${author.username}">作者</div>
                     <div class="text-muted mt-3">
                         发布于 <b th:text="${#dates.format(post.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">发布时间</b>
                         <ul class="d-inline float-right">
@@ -94,7 +94,8 @@
                                 th:each="secondVO:${commentVO.get('secondComments')}">
                                 <div>
                                     <span><b class="text-info" th:utext="${secondVO.user.username}">二级评论作者</b>
-                                        <span th:if="${secondVO.targetUser!=null}">回复 <span class="text-info"th:utext="${secondVO.targetUser.username}">被回复评论用户名</span>
+                                        <span th:if="${secondVO.targetUser!=null}">回复 <span class="text-info"
+                                                                                            th:utext="${secondVO.targetUser.username}">被回复评论用户名</span>
                                     </span>
                                         :&nbsp;&nbsp;
                                     </span>
@@ -106,32 +107,41 @@
                                         二级回复发布时间
                                     </span>
                                     <ul class="d-inline float-right">
-                                        <li class="d-inline ml-2"><a href="#" class="text-primary">赞(0)</a></li>
+                                        <li class="d-inline ml-2"><a th:href="|reply-${secondVOStat.count}|" class="text-primary">赞(0)</a></li>
                                         <li class="d-inline ml-2">|</li>
                                         <li class="d-inline ml-2">
-                                            <a th:href="|reply-${secondVOStat.count}|" data-toggle="collapse"
+                                            <a th:href="|#reply-${secondVOStat.count}|" data-toggle="collapse"
                                                class="text-primary">回复
                                             </a>
                                         </li>
                                     </ul>
                                     <div th:id="|reply-${secondVOStat.count}|" class="mt-4 collapse">
-                                        <div>
-                                            <input type="text" class="input-size" placeholder="回复寒江雪"/>
-                                        </div>
-                                        <div class="text-right mt-2">
-                                            <button type="button" class="btn btn-primary btn-sm" onclick="#">&nbsp;&nbsp;回&nbsp;&nbsp;复&nbsp;&nbsp;</button>
-                                        </div>
+                                        <form th:action="@{|/post/${post.id}/comment|}" method="post">
+                                            <div>
+                                                <input type="text" name="content" class="input-size" th:placeholder="|回复 ${secondVO.user.username}：|"/>
+                                                <input type="hidden" name="type" value="1">
+                                                <input type="hidden" name="replyTo" th:value="${commentVO.comment.id}">
+                                                <input type="hidden" name="replyToUid" th:value="${secondVO.user.id}">
+                                            </div>
+                                            <div class="text-right mt-2">
+                                                <button type="submit" class="btn btn-primary btn-sm" onclick="#">&nbsp;&nbsp;回&nbsp;&nbsp;复&nbsp;&nbsp;</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </li>
                             <!-- 回复输入框 -->
                             <li class="pb-3 pt-3">
-                                <div>
-                                    <input type="text" class="input-size" placeholder="请输入你的观点"/>
-                                </div>
-                                <div class="text-right mt-2">
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="#">&nbsp;&nbsp;回&nbsp;&nbsp;复&nbsp;&nbsp;</button>
-                                </div>
+                                <form th:action="@{|/post/${post.id}/comment|}" method="post">
+                                    <div>
+                                        <input type="text" class="input-size" name="content"/>
+                                        <input type="hidden" name="type" value="1">
+                                        <input type="hidden" name="replyTo" th:value="${commentVO.comment.id}">
+                                    </div>
+                                    <div class="text-right mt-2">
+                                        <button type="submit" class="btn btn-primary btn-sm" onclick="#">&nbsp;&nbsp;回&nbsp;&nbsp;复&nbsp;&nbsp;</button>
+                                    </div>
+                                </form>
                             </li>
                         </ul>
                     </div>
@@ -142,10 +152,12 @@
         </div>
         <!-- 回帖输入 -->
         <div class="container mt-3">
-            <form class="replyform">
+            <form class="replyform" th:action="@{|/post/${post.id}/comment|}" method="post">
                 <p class="mt-3">
                     <a name="replyform"></a>
-                    <textarea placeholder="在这里畅所欲言你的看法吧!"></textarea>
+                    <textarea name="content" placeholder="在这里发表你的看法"></textarea>
+                    <input type="hidden" name="type" value="0">
+                    <input type="hidden" name="replyTo" th:value="${post.id}">
                 </p>
                 <p class="text-right">
                     <button type="submit" class="btn btn-primary btn-sm">&nbsp;&nbsp;回&nbsp;&nbsp;帖&nbsp;&nbsp;</button>
