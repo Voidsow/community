@@ -33,9 +33,9 @@ public class Page {
         else
             left += pageNeeded - left - right;
         //page本身在左边添加
-        for (int i = 0; i <= left; i++)
+        for (int i = 0; current - i > 0 && i <= left; i++)
             pageNos.addFirst(current - i);
-        for (int i = 1; i <= right; i++)
+        for (int i = 1; current + i <= pageNum && i <= right; i++)
             pageNos.addLast(current + i);
     }
 }

@@ -49,7 +49,7 @@ community:
   # 分页配置
   page:
     # 页大小
-    size: 10
+    size: 5
     # 页数量
     num: 5
   token:

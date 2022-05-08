@@ -47,3 +47,15 @@ create table comment
     gmt_modified datetime
 );
 create index comment_belong_to_index on comment (reply_to);
+
+drop table if exists chat;
+create table chat
+(
+    id              int auto_increment primary key,
+    speaker         int,
+    listener        int,
+    conversation_id varchar(64) comment '会话id：由发送人id和送信人id拼接而成，id小者在前',
+    content         varchar(1024),
+    status          int comment '消息状态：0 表示未读 1表示已读 2表示删除',
+    gmt_create       datetime
+)

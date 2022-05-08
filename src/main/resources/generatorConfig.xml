@@ -41,7 +41,10 @@
 <!--        <table tableName="post" domainObjectName="Post">-->
 <!--            <property name="useActualColumnNames" value="false"/>-->
 <!--        </table>-->
-        <table tableName="comment" domainObjectName="Comment">
+<!--        <table tableName="comment" domainObjectName="Comment">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--        </table>-->
+        <table tableName="chat" domainObjectName="Chat">
             <property name="useActualColumnNames" value="false"/>
         </table>
     </context>

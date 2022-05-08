@@ -74,8 +74,9 @@ public class PostController {
         }
         model.addAttribute("comments", commentVOList);
         model.addAttribute("author", userService.findById(post.getUid()));
-        model.addAttribute("page",
-                new Page(commentService.getCount(POST_LEVEL_ONE, id), page, pageSize, pageNum));
+        Page pageDTO = new Page(commentService.getCount(POST_LEVEL_ONE, id), page, pageSize, pageNum);
+        model.addAttribute("page", pageDTO);
+        model.addAttribute("baseFloor", pageSize * (pageDTO.current - 1));
         return "discuss-detail";
     }
 

@@ -59,7 +59,7 @@
             <!-- 回帖数量 -->
             <div class="row">
                 <div class="col-8">
-                    <h6><b class="square"></b> <i th:text="${post.commentNum}">n</i>条回帖</h6>
+                    <h6><b class="square"></b>共<i th:text="${post.commentNum}">n</i>条回帖</h6>
                 </div>
                 <div class="col-4 text-right">
                     <a href="#replyform" class="btn btn-primary btn-sm">&nbsp;&nbsp;回&nbsp;&nbsp;帖&nbsp;&nbsp;</a>
@@ -75,6 +75,7 @@
                     <div class="media-body">
                         <div class="mt-0">
                             <span class="font-size-12 text-success" th:utext="${commentVO.user.username}">一级回复者</span>
+                            <span class="badge badge-secondary float-right floor"><i th:text="${baseFloor+commentVOStat.count}">楼层数</i>#</span>
                         </div>
                         <div class="mt-2" th:utext="${commentVO.comment.content}">
                             回帖内容
