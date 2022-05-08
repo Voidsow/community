@@ -5,9 +5,14 @@ import com.voidsow.community.mapper.ChatMapper;
 import com.voidsow.community.mapper.CustomChatMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static com.voidsow.community.constant.Constant.READ;
+import static com.voidsow.community.constant.Constant.UNREAD;
 
 @Service
 public class ChatService {
@@ -36,5 +41,14 @@ public class ChatService {
 
     public int countConversation(String conversationId) {
         return customChatMapper.countConversation(conversationId);
+    }
+
+    public void sendMessage(int from, int to, String content) {
+        Chat message = new Chat(null, from, to, from < to ? from + "_" + to : to + "_" + from, HtmlUtils.htmlEscape(content), UNREAD, new Date());
+        chatMapper.insertSelective(message);
+    }
+
+    public void setRead(List<Integer> ids) {
+        customChatMapper.updateMsgStatus(ids, READ);
     }
 }

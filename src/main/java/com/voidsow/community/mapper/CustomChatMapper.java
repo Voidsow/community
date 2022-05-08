@@ -18,4 +18,5 @@ public interface CustomChatMapper {
 
     int countConversation(String conversationId);
 
+    void updateMsgStatus(List<Integer> ids,int status);
 }

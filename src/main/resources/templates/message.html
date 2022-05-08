@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
+    <link rel="icon" href="blank"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/global.css}"/>
@@ -23,7 +23,8 @@
                     <h6><b class="square"></b><i class="text-success" th:utext="${talkTo.username}">对话用户</i></h6>
                 </div>
                 <div class="col-4 text-right">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="location.href='letter.html';">返回
+                    <button type="button" class="btn btn-secondary btn-sm"
+                            onclick="location.href=CONTEXT_PATH+'/chat';">返回
                     </button>
                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sendModal">
                         给TA私信
@@ -45,7 +46,8 @@
                             <form>
                                 <div class="form-group">
                                     <label for="recipient-name" class="col-form-label">发给：</label>
-                                    <input type="text" class="form-control" id="recipient-name" value="落基山脉下的闲人">
+                                    <input type="text" class="form-control" id="recipient-name"
+                                           th:value="${talkTo.username}">
                                 </div>
                                 <div class="form-group">
                                     <label for="message-text" class="col-form-label">内容：</label>

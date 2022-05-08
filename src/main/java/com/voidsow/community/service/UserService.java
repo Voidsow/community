@@ -37,6 +37,12 @@ public class UserService {
         return userMapper.selectByPrimaryKey(id);
     }
 
+    public User findByName(String username) {
+        UserExample userExample = new UserExample();
+        userExample.or().andUsernameEqualTo(username);
+        return userMapper.selectByExample(userExample).get(0);
+    }
+
     public Map<String, Object> register(User user, String confirmPsw) throws MessagingException {
         Map<String, Object> map = new HashMap<>();
         if (user.getUsername() == null)
