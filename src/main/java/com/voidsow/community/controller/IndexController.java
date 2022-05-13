@@ -27,4 +27,9 @@ public class IndexController {
         model.addAllAttributes(postService.getPosts(null, page));
         return "index";
     }
+
+    @GetMapping("/error")
+    public String error() {
+        return "error/500";
+    }
 }
