@@ -35,7 +35,7 @@
             </h6>
             <!-- 作者 -->
             <div class="media pb-3 border-bottom">
-                <a href="blank">
+                <a th:href="@{|/user/${author.id}/profile|}">
                     <img th:src="${author.headerUrl}"
                          class="align-self-start mr-4 rounded-circle user-header" alt="作者头像">
                 </a>
@@ -45,7 +45,8 @@
                         发布于 <b th:text="${#dates.format(post.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">发布时间</b>
                         <ul class="d-inline float-right">
                             <li class="d-inline ml-2">
-                                <a th:onclick="|like(this,0,${post.id})|" class="text-primary hover-pointer">
+                                <a th:onclick="|like(this,0,${post.id},${post.uid})|"
+                                   class="text-primary hover-pointer">
                                     <b th:text="${like?'已赞':'赞'}">赞</b> <i th:text="${likeNum}">点赞数量</i>
                                 </a>
                             </li>
@@ -77,7 +78,7 @@
             <!-- 回帖列表 -->
             <ul class="list-unstyled mt-4">
                 <li class="media pb-3 pt-3 mb-3 border-bottom" th:each="commentVO:${comments}">
-                    <a href="blank">
+                    <a th:href="@{|/user/${commentVO.user.id}/profile|}">
                         <img th:src="${commentVO.user.headerUrl}"
                              class="align-self-start mr-4 rounded-circle user-header" alt="评论者头像">
                     </a>
@@ -94,7 +95,7 @@
                             <span>发布于 <b th:text="${#dates.format(commentVO.comment.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">回复时间</b></span>
                             <ul class="d-inline float-right">
                                 <li class="d-inline ml-2">
-                                    <a th:onclick="|like(this,1,${commentVO.comment.id})|"
+                                    <a th:onclick="|like(this,1,${commentVO.comment.id},${commentVO.comment.uid})|"
                                        class="text-primary hover-pointer">
                                         <b th:text="${commentVO.like?'已赞':'赞'}">赞</b>(<i th:text="${commentVO.likeNum}">数量</i>)
                                     </a>
@@ -124,9 +125,10 @@
                                     </span>
                                     <ul class="d-inline float-right">
                                         <li class="d-inline ml-2"><a
-                                                th:onclick="|like(this,1,${secondVO.secondComment.id})|"
+                                                th:onclick="|like(this,1,${secondVO.secondComment.id},${secondVO.secondComment.uid})|"
                                                 class="text-primary hover-pointer">
-                                            <b th:text="${secondVO.like?'已赞':'赞'}">赞</b>(<i th:text="${secondVO.likeNum}">0</i>)</a>
+                                            <b th:text="${secondVO.like?'已赞':'赞'}">赞</b>(<i
+                                                th:text="${secondVO.likeNum}">0</i>)</a>
                                         </li>
                                         <li class="d-inline ml-2">|</li>
                                         <li class="d-inline ml-2">

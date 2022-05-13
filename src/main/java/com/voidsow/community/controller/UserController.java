@@ -1,6 +1,9 @@
 package com.voidsow.community.controller;
 
 import com.voidsow.community.annotation.LoginRequire;
+import com.voidsow.community.entity.User;
+import com.voidsow.community.exception.ResourceNotFoundException;
+import com.voidsow.community.service.LikeService;
 import com.voidsow.community.service.UserService;
 import com.voidsow.community.utils.Authorizer;
 import com.voidsow.community.utils.HostHolder;
@@ -10,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
@@ -22,6 +26,7 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController {
     UserService userService;
+    LikeService likeService;
     HostHolder hostHolder;
     Authorizer authorizer;
 
@@ -35,8 +40,10 @@ public class UserController {
     private String CONTEXT_PATH;
 
     @Autowired
-    public UserController(UserService userService, HostHolder hostHolder, Authorizer authorizer) {
+    public UserController(UserService userService, LikeService likeService,
+                          HostHolder hostHolder, Authorizer authorizer) {
         this.userService = userService;
+        this.likeService = likeService;
         this.hostHolder = hostHolder;
         this.authorizer = authorizer;
     }
@@ -78,6 +85,16 @@ public class UserController {
             fileInputStream.transferTo(byteOs);
             return byteOs.toByteArray();
         }
+    }
+
+    @GetMapping("/{id}/profile")
+    public String getProfile(@PathVariable("id") int id, Model model) {
+        User user = userService.findById(id);
+        if (user == null)
+            throw new ResourceNotFoundException();
+        model.addAttribute("observed", user);
+        model.addAttribute("likeNum", likeService.getLike(id));
+        return "profile";
     }
 
     boolean isImage(String suffix) {

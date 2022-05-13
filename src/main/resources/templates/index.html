@@ -78,7 +78,7 @@
             <!-- 帖子列表 -->
             <ul class="list-unstyled">
                 <li class="media pb-3 pt-3 mb-3 border-bottom" th:each="post,iter:${posts}">
-                    <a href="site/profile.html">
+                    <a th:href="@{|/user/${post.uid}/profile|}">
                         <img th:src="${users.get(iter.index).headerUrl}" class="mr-4 rounded-circle user-header"
                              alt="头像">
                     </a>

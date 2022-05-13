@@ -33,7 +33,7 @@ public class RedisTests {
 
     @Test
     public void testTx() {
-        List<Object> execute = redisTemplate.execute(new SessionCallback<List<Object>>() {
+        List<Object> execute = redisTemplate.execute(new SessionCallback<>() {
             @Override
             public List<Object> execute(RedisOperations operations) throws DataAccessException {
                 operations.multi();

@@ -32,13 +32,12 @@ public class LikeController {
     @ResponseBody
     public Result like(@RequestBody Like like) {
         User user = hostHolder.user.get();
-        String status = likeService.likeOrNot(like.getType(), like.getId(), user.getId());
+        boolean status = likeService.likeOrNot(like.getType(), like.getId(), user.getId(), like.getLikedUid());
         long likeNum = likeService.likeNum(like.getType(), like.getId());
         Map<String, Object> result = new HashMap<>();
         result.put("num", likeNum);
         result.put("like", status);
         return new Result(0, "success", result);
     }
-
 
 }

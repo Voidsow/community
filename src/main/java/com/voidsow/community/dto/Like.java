@@ -6,4 +6,5 @@ import lombok.Data;
 public class Like {
     int type;
     int id;
+    int likedUid;
 }
