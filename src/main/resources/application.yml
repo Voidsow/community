@@ -24,6 +24,8 @@ spring:
           writetimeout: 10000
           ssl:
             enable: true
+  redis:
+    database: 1
 
 mybatis:
   configuration:

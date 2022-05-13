@@ -57,5 +57,5 @@ create table chat
     conversation_id varchar(64) comment '会话id：由发送人id和送信人id拼接而成，id小者在前',
     content         varchar(1024),
     status          int comment '消息状态：0 表示未读 1表示已读 2表示删除',
-    gmt_create       datetime
+    gmt_create      datetime
 )

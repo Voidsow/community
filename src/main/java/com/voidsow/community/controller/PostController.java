@@ -6,6 +6,7 @@ import com.voidsow.community.entity.Comment;
 import com.voidsow.community.entity.Post;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.service.CommentService;
+import com.voidsow.community.service.LikeService;
 import com.voidsow.community.service.PostService;
 import com.voidsow.community.service.UserService;
 import com.voidsow.community.utils.HostHolder;
@@ -18,8 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-import static com.voidsow.community.constant.Constant.POST_LEVEL_ONE;
-import static com.voidsow.community.constant.Constant.POST_LEVEL_TWO;
+import static com.voidsow.community.constant.Constant.*;
 
 @Controller
 @RequestMapping("/post")
@@ -27,6 +27,7 @@ public class PostController {
     PostService postService;
     UserService userService;
     CommentService commentService;
+    LikeService likeService;
     private HostHolder hostHolder;
 
     @Value("${community.page.size}")
@@ -37,17 +38,22 @@ public class PostController {
 
     @Autowired
     public PostController(PostService postService, UserService userService,
-                          CommentService commentService, HostHolder hostHolder) {
+                          CommentService commentService, HostHolder hostHolder,
+                          LikeService likeService) {
         this.postService = postService;
         this.userService = userService;
         this.commentService = commentService;
+        this.likeService = likeService;
         this.hostHolder = hostHolder;
     }
 
     @GetMapping("/{id}")
     public String getPost(@PathVariable("id") Integer id, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         Post post = postService.get(id);
+        User user = hostHolder.user.get();
         model.addAttribute("post", post);
+        model.addAttribute("likeNum", likeService.likeNum(POST, post.getId()));
+        model.addAttribute("like", user != null && likeService.like(POST, post.getId(), user.getId()));
         //一级评论列表
         List<Map<String, Object>> commentVOList = new ArrayList<>();
         List<Comment> comments = commentService.find(POST_LEVEL_ONE, id, (page - 1) * pageSize, pageSize);
@@ -62,6 +68,8 @@ public class PostController {
             for (var secondComment : secondComments) {
                 Map<String, Object> secondVO = new HashMap<>();
                 secondVO.put("secondComment", secondComment);
+                secondVO.put("likeNum", likeService.likeNum(COMMENT, secondComment.getId()));
+                secondVO.put("like", user != null && likeService.like(COMMENT, secondComment.getId(), user.getId()));
                 secondVO.put("user", userService.findById(secondComment.getUid()));
                 User targetUser = secondComment.getReplyToUid() == null ? null :
                         userService.findById(secondComment.getReplyToUid());
@@ -70,6 +78,8 @@ public class PostController {
             }
             commentVo.put("secondComments", secondCommentVOList);
             commentVo.put("replyNum", secondComments.size());
+            commentVo.put("likeNum", likeService.likeNum(COMMENT, comment.getId()));
+            commentVo.put("like", user != null && likeService.like(COMMENT, comment.getId(), user.getId()));
             commentVOList.add(commentVo);
         }
         model.addAttribute("comments", commentVOList);

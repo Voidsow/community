@@ -92,7 +92,7 @@
                             <u class="mr-3" th:utext="*{username}"></u> 发布于 <b
                                 th:text="${#dates.format(post.gmtCreate,'yyyy-MM-dd HH:mm:ss')}">2019-04-15 15:32:18</b>
                             <ul class="d-inline float-right">
-                                <li class="d-inline ml-2">赞 <span>点赞数</span></li>
+                                <li class="d-inline ml-2">赞 <span th:text="${likes.get(iter.index)}">点赞数</span></li>
                                 <li class="d-inline ml-2">|</li>
                                 <li class="d-inline ml-2">回帖 <span th:text="${post.commentNum}">回帖数</span></li>
                             </ul>
