@@ -3,6 +3,7 @@ package com.voidsow.community.controller;
 import com.voidsow.community.annotation.LoginRequire;
 import com.voidsow.community.entity.User;
 import com.voidsow.community.exception.ResourceNotFoundException;
+import com.voidsow.community.service.FollowService;
 import com.voidsow.community.service.LikeService;
 import com.voidsow.community.service.UserService;
 import com.voidsow.community.utils.Authorizer;
@@ -27,6 +28,7 @@ import java.util.UUID;
 public class UserController {
     UserService userService;
     LikeService likeService;
+    FollowService followService;
     HostHolder hostHolder;
     Authorizer authorizer;
 
@@ -41,9 +43,10 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService, LikeService likeService,
-                          HostHolder hostHolder, Authorizer authorizer) {
+                          HostHolder hostHolder, Authorizer authorizer, FollowService followService) {
         this.userService = userService;
         this.likeService = likeService;
+        this.followService = followService;
         this.hostHolder = hostHolder;
         this.authorizer = authorizer;
     }
@@ -89,10 +92,15 @@ public class UserController {
 
     @GetMapping("/{id}/profile")
     public String getProfile(@PathVariable("id") int id, Model model) {
-        User user = userService.findById(id);
-        if (user == null)
+        User observed = userService.findById(id);
+        if (observed == null)
             throw new ResourceNotFoundException();
-        model.addAttribute("observed", user);
+        User user = hostHolder.user.get();
+        model.addAttribute("observed", observed);
+        model.addAttribute("followeeNum", followService.countFollowee(observed.getId()));
+        model.addAttribute("followerNum", followService.countFollower(observed.getId()));
+        model.addAttribute("isFollowed", user != null &&
+                followService.isFollower(observed.getId(), user.getId()));
         model.addAttribute("likeNum", likeService.getLike(id));
         return "profile";
     }

@@ -1,14 +1,21 @@
-$(function(){
-	$(".follow-btn").click(follow);
+$(function () {
+    $(".follow-btn").click(follow);
 });
 
 function follow() {
-	var btn = this;
-	if($(btn).hasClass("btn-info")) {
-		// 关注TA
-		$(btn).text("已关注").removeClass("btn-info").addClass("btn-secondary");
-	} else {
-		// 取消关注
-		$(btn).text("关注TA").removeClass("btn-secondary").addClass("btn-info");
-	}
+    var btn = this;
+    let followee = document.querySelector("#id").value;
+    var followed = $(btn).hasClass("btn-info");
+    fetch(CONTEXT_PATH + "/follow", {
+        method: "POST",
+        headers: {"Content-Type": MEDIA_TYPE.JSON},
+        body: JSON.stringify({followee, followed})
+    }).then(resp => resp.json())
+        .then(data => {
+            if (data.code === 0) {
+                window.location.reload();
+            } else {
+                alert(followed ? "" : "取消" + "关注失败");
+            }
+        })
 }
