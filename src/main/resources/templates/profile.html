@@ -13,6 +13,7 @@
 <div class="nk-container">
     <!-- 头部 -->
     <header th:replace="component::header"></header>
+    <input type="hidden" id="self" th:value="${user!=null?user.id:-1}">
 
     <!-- 内容 -->
     <div class="main">
@@ -39,9 +40,10 @@
                 <div class="media-body">
                     <h5 class="mt-0 text-warning">
                         <span th:text="${observed.username}">用户名</span>
+                        <input type="hidden" th:value="${observed.id}">
                         <button type="button"
                                 th:class="|btn ${isFollowed?'btn-secondary':'btn-info'} btn-sm float-right mr-5 follow-btn|"
-                                th:text="${isFollowed?'已关注':'关注TA'}" th:if="${user!=null&&user!=observed}">
+                                th:text="${isFollowed?'已关注':'关注TA'}" th:if="${user!=null&&user.id!=observed.id}">
                         </button>
                     </h5>
                     <div class="text-muted mt-3">
@@ -50,9 +52,16 @@
                         </span>
                     </div>
                     <div class="text-muted mt-3 mb-5">
-                        <span>关注了 <a class="text-primary" href="followee.html" th:text="${followeeNum}">0</a> 人</span>
-                        <span class="ml-4">关注者 <a class="text-primary" href="follower.html"
-                                                  th:text="${followerNum}">0</a> 人</span>
+                        <span>关注了
+                            <a class="text-primary" th:href="@{|/user/${observed.id}/followee|}"
+                               th:text="${followeeNum}">0</a>
+                            人
+                        </span>
+                        <span class="ml-4">关注者
+                            <a class="text-primary" th:href="@{|/user/${observed.id}/follower|}"
+                               th:text="${followerNum}">0
+                            </a>人
+                        </span>
                         <span class="ml-4">获得了 <i class="text-danger" th:text="${likeNum}">0</i> 个赞</span>
                     </div>
                 </div>

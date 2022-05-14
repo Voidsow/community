@@ -21,6 +21,8 @@ public class Page {
         if (recordCount % pageSize != 0) {
             pageNum += 1;
         }
+        if (pageNum == 0)
+            return;
         last = pageNum;
         //左右两边的分页栏长度，不能超过到两端的距离
         var left = Math.min(pageNeeded / 2, current - 1);

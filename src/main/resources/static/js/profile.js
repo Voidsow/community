@@ -4,7 +4,12 @@ $(function () {
 
 function follow() {
     var btn = this;
-    let followee = document.querySelector("#id").value;
+    let followee = btn.previousElementSibling.value;
+    const selfId = document.querySelector("#self").value
+    if (selfId === followee) {
+        alert("不能关注自己哦！");
+        return;
+    }
     var followed = $(btn).hasClass("btn-info");
     fetch(CONTEXT_PATH + "/follow", {
         method: "POST",
